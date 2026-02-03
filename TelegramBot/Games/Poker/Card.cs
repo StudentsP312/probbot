@@ -1,4 +1,4 @@
-namespace TelegramBot.Games.Poker;
+namespace TelegramBot.Games.CardModels;
 
 public enum Suit
 {
