@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="AdminClient/AdminClient.csproj" />
+  <Project Path="TelegramBot/TelegramBot.csproj" />
+</Solution>

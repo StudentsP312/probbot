@@ -1,30 +1,36 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
-using Console.Advanced;
-using Console.Advanced.Services;
+using TelegramBot;
+using TelegramBot.Services;
 
-IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices((context, services) =>
-    {
-        // Register Bot configuration
-        services.Configure<BotConfiguration>(context.Configuration.GetSection("BotConfiguration"));
+var builder = Host.CreateApplicationBuilder(args);
 
-        // Register named HttpClient to benefits from IHttpClientFactory and consume it with ITelegramBotClient typed client.
-        // See https://docs.microsoft.com/en-us/aspnet/core/fundamentals/http-requests?view=aspnetcore-5.0#typed-clients
-        // and https://docs.microsoft.com/en-us/dotnet/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests
-        services.AddHttpClient("telegram_bot_client").RemoveAllLoggers()
-                .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
-                {
-                    BotConfiguration? botConfiguration = sp.GetService<IOptions<BotConfiguration>>()?.Value;
-                    ArgumentNullException.ThrowIfNull(botConfiguration);
-                    TelegramBotClientOptions options = new(botConfiguration.BotToken);
-                    return new TelegramBotClient(options, httpClient);
-                });
+builder.Services.Configure<BotConfiguration>(builder.Configuration.GetSection("BotConfiguration"));
 
-        services.AddScoped<UpdateHandler>();
-        services.AddScoped<ReceiverService>();
-        services.AddHostedService<PollingService>();
-    })
-    .Build();
+builder
+    .Services.AddHttpClient("telegram_bot_client")
+    .AddTypedClient<ITelegramBotClient>(
+        (httpClient, sp) =>
+        {
+            BotConfiguration? botConfig = sp.GetService<IOptions<BotConfiguration>>()?.Value;
+            ArgumentNullException.ThrowIfNull(botConfig);
 
+            TelegramBotClientOptions options = new(botConfig.BotToken);
+            return new TelegramBotClient(options, httpClient);
+        }
+    );
+
+builder.Services.AddScoped<UpdateHandler>();
+builder.Services.AddScoped<ReceiverService>();
+builder.Services.AddHostedService<PollingService>();
+
+// Register new services
+builder.Services.AddScoped<MainMenuService>();
+builder.Services.AddScoped<TelegramBot.Services.Games.PokerGameService>();
+builder.Services.AddScoped<TelegramBot.Services.Games.BlackjackGameService>();
+builder.Services.AddScoped<TelegramBot.Services.Games.MinesGameService>();
+
+var host = builder.Build();
 await host.RunAsync();

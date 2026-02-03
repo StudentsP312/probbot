@@ -1,4 +1,4 @@
-namespace Console.Advanced;
+namespace TelegramBot;
 
 public class BotConfiguration
 {

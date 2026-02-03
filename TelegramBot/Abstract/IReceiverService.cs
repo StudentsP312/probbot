@@ -1,4 +1,4 @@
-namespace Console.Advanced.Abstract;
+namespace TelegramBot.Abstract;
 
 public interface IReceiverService
 {

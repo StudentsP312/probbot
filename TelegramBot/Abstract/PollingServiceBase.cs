@@ -1,10 +1,17 @@
-namespace Console.Advanced.Abstract;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+namespace TelegramBot.Abstract;
 
 /// <summary>An abstract class to compose Polling background service and Receiver implementation classes</summary>
 /// <remarks>See more: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services#consuming-a-scoped-service-in-a-background-task</remarks>
 /// <typeparam name="TReceiverService">Receiver implementation class</typeparam>
-public abstract class PollingServiceBase<TReceiverService>(IServiceProvider serviceProvider, ILogger<PollingServiceBase<TReceiverService>> logger)
-    : BackgroundService where TReceiverService : IReceiverService
+public abstract class PollingServiceBase<TReceiverService>(
+    IServiceProvider serviceProvider,
+    ILogger<PollingServiceBase<TReceiverService>> logger
+) : BackgroundService
+    where TReceiverService : IReceiverService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -19,8 +26,6 @@ public abstract class PollingServiceBase<TReceiverService>(IServiceProvider serv
         {
             try
             {
-                // Create new IServiceScope on each iteration. This way we can leverage benefits
-                // of Scoped TReceiverService and typed HttpClient - we'll grab "fresh" instance each time
                 using var scope = serviceProvider.CreateScope();
                 var receiver = scope.ServiceProvider.GetRequiredService<TReceiverService>();
 
@@ -29,7 +34,6 @@ public abstract class PollingServiceBase<TReceiverService>(IServiceProvider serv
             catch (Exception ex)
             {
                 logger.LogError("Polling failed with exception: {Exception}", ex);
-                // Cooldown if something goes wrong
                 await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
             }
         }
