@@ -1,6 +1,8 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Console.Advanced.Abstract;
+namespace TelegramBot.Abstract;
 
 /// <summary>An abstract class to compose Polling background service and Receiver implementation classes</summary>
 /// <remarks>See more: https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services#consuming-a-scoped-service-in-a-background-task</remarks>

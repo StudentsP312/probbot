@@ -39,5 +39,5 @@ csharp_style_expression_bodied_operators = when_on_single_line
 csharp_style_var_for_built_in_types = false
 
 [*.md]
-trim_trailing_whitespace = false
 indent_size = 2
+

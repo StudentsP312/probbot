@@ -44,8 +44,8 @@ public class TexasHoldemGame
 
     public string GetWinner()
     {
-        var playerRes = HandEvaluator.Evaluate(PlayerHand, Table);
-        var enemyRes = HandEvaluator.Evaluate(EnemyHand, Table);
+        var playerRes = PokerHandResult.Evaluate(PlayerHand, Table);
+        var enemyRes = PokerHandResult.Evaluate(EnemyHand, Table);
 
         if (playerRes.Strength > enemyRes.Strength)
             return "Player win";

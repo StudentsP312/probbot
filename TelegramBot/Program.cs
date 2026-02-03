@@ -1,10 +1,9 @@
-// Не забудьте свои namespace:
-using Console.Advanced;
-using Console.Advanced.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
+using TelegramBot;
+using TelegramBot.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -26,6 +25,12 @@ builder
 builder.Services.AddScoped<UpdateHandler>();
 builder.Services.AddScoped<ReceiverService>();
 builder.Services.AddHostedService<PollingService>();
+
+// Register new services
+builder.Services.AddScoped<MainMenuService>();
+builder.Services.AddScoped<TelegramBot.Services.Games.PokerGameService>();
+builder.Services.AddScoped<TelegramBot.Services.Games.BlackjackGameService>();
+builder.Services.AddScoped<TelegramBot.Services.Games.MinesGameService>();
 
 var host = builder.Build();
 await host.RunAsync();

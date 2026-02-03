@@ -1,7 +1,8 @@
+using Microsoft.Extensions.Logging;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 
-namespace Console.Advanced.Abstract;
+namespace TelegramBot.Abstract;
 
 /// <summary>An abstract class to compose Receiver Service and Update Handler classes</summary>
 /// <typeparam name="TUpdateHandler">Update Handler to use in Update Receiver</typeparam>
