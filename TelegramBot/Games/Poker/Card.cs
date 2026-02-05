@@ -35,6 +35,7 @@ public record Card(Suit Suit, Rank Rank)
             Suit.Diamonds => "♦",
             Suit.Spades => "♠",
             Suit.Clubs => "♣",
+            _ => throw new ArgumentException("Card suit is not valid"),
         };
         string r = Rank switch
         {

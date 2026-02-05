@@ -1,4 +1,4 @@
-using TelegramBot.Games.Poker;
+namespace TelegramBot.Games.Poker;
 
 public class PokerSession
 {

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Telegram.Bot;
 using TelegramBot;
+using TelegramBot.Abstract;
 using TelegramBot.Services;
 
 var builder = Host.CreateApplicationBuilder(args);
@@ -27,6 +28,7 @@ builder.Services.AddScoped<ReceiverService>();
 builder.Services.AddHostedService<PollingService>();
 
 // Register new services
+builder.Services.AddScoped<ICacheService, DatabaseCacheService>();
 builder.Services.AddScoped<MainMenuService>();
 builder.Services.AddScoped<TelegramBot.Services.Games.PokerGameService>();
 builder.Services.AddScoped<TelegramBot.Services.Games.BlackjackGameService>();

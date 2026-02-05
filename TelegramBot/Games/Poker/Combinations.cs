@@ -18,7 +18,7 @@ public class PokerHandResult
     public HandStrength Strength { get; set; }
     public Rank HighRank { get; set; }
 
-    public static PokerHandResult Evaluate(List<Card> hand, List<Card> table)
+    public static PokerHandResult FromHand(List<Card> hand, List<Card> table)
     {
         var allCards = hand.Concat(table).OrderByDescending(c => c.Rank).ToList();
         var groups = allCards
