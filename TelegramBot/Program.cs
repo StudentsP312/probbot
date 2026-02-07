@@ -28,7 +28,7 @@ builder.Services.AddScoped<ReceiverService>();
 builder.Services.AddHostedService<PollingService>();
 
 // Register new services
-builder.Services.AddScoped<ICacheService, DatabaseCacheService>();
+builder.Services.AddSingleton<ICacheService, InMemoryCacheService>();
 builder.Services.AddScoped<MainMenuService>();
 builder.Services.AddScoped<TelegramBot.Services.Games.PokerGameService>();
 builder.Services.AddScoped<TelegramBot.Services.Games.BlackjackGameService>();
