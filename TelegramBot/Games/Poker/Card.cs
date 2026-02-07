@@ -52,20 +52,21 @@ public record Card(Suit Suit, Rank Rank)
 
 public class Deck
 {
-    private List<Card> _cards = new();
+    public List<Card> Cards { get; set; } = new();
 
     public Deck()
     {
         foreach (Suit s in Enum.GetValues(typeof(Suit)))
         foreach (Rank r in Enum.GetValues(typeof(Rank)))
-            _cards.Add(new Card(s, r));
-        _cards = _cards.OrderBy(x => Guid.NewGuid()).ToList();
+            Cards.Add(new Card(s, r));
+        Cards = Cards.OrderBy(x => Guid.NewGuid()).ToList();
     }
 
     public Card Deal()
     {
-        var c = _cards[0];
-        _cards.RemoveAt(0);
+        if (Cards.Count == 0) throw new InvalidOperationException("Deck is empty");
+        var c = Cards[0];
+        Cards.RemoveAt(0);
         return c;
     }
 }

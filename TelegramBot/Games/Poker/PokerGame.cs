@@ -1,51 +1,45 @@
 using TelegramBot.Games.Poker;
 
-public class TexasHoldemGame
+namespace TelegramBot.Games.Poker;
+
+public static class PokerGameLogic
 {
-    public Deck Deck { get; private set; }
-
-    public List<Card> PlayerHand { get; private set; }
-
-    public List<Card> EnemyHand { get; private set; }
-
-    public List<Card> Table { get; private set; }
-
-    public int Stage { get; private set; }
-
-    public TexasHoldemGame()
+    public static void StartGame(PokerSession session)
     {
-        Deck = new Deck();
-        PlayerHand = new List<Card>();
-        EnemyHand = new List<Card>();
-        Table = new List<Card>();
-        Stage = 0;
+        // Reset or Initialize if needed, though session usually comes fresh
+        if (session.Deck.Cards.Count < 52) 
+            session.Deck = new Deck(); // Ensure fresh deck
+
+        session.PlayerHand.Clear();
+        session.EnemyHand.Clear();
+        session.TableCards.Clear();
+        session.Stage = 0;
+
+        session.PlayerHand.Add(session.Deck.Deal());
+        session.PlayerHand.Add(session.Deck.Deal());
+
+        session.EnemyHand.Add(session.Deck.Deal());
+        session.EnemyHand.Add(session.Deck.Deal());
     }
 
-    public void StartGame()
+    public static void NextStage(PokerSession session)
     {
-        PlayerHand.Add(Deck.Deal());
-        PlayerHand.Add(Deck.Deal());
-
-        EnemyHand.Add(Deck.Deal());
-        EnemyHand.Add(Deck.Deal());
-    }
-
-    public void NextStage()
-    {
-        if (Stage == 0)
+        if (session.Stage == 0)
         {
             for (int i = 0; i < 3; i++)
-                Table.Add(Deck.Deal());
+                session.TableCards.Add(session.Deck.Deal());
         }
-        else if (Stage == 1 || Stage == 2)
-            Table.Add(Deck.Deal());
-        Stage++;
+        else if (session.Stage == 1 || session.Stage == 2)
+        {
+            session.TableCards.Add(session.Deck.Deal());
+        }
+        session.Stage++;
     }
 
-    public string GetWinner()
+    public static string GetWinner(PokerSession session)
     {
-        var playerRes = PokerHandResult.FromHand(PlayerHand, Table);
-        var enemyRes = PokerHandResult.FromHand(EnemyHand, Table);
+        var playerRes = PokerHandResult.FromHand(session.PlayerHand, session.TableCards);
+        var enemyRes = PokerHandResult.FromHand(session.EnemyHand, session.TableCards);
 
         if (playerRes.Strength > enemyRes.Strength)
             return "Player win";
