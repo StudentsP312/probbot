@@ -1,4 +1,4 @@
-﻿namespace AdminClient.ViewModels;
+namespace AdminClient.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
