@@ -1,4 +1,6 @@
-using TelegramBot.Games.Poker;
+using TelegramBot.Models;
+
+namespace TelegramBot.Games.Poker;
 
 public class TexasHoldemGame
 {
